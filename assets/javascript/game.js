@@ -3,20 +3,23 @@ var words = ["Rick", "Birdperson","Summer","Morty", "Microverse", "Unity","Nanov
 // Choose random words
 var randomNum = Math.floor(Math.random()* words.length);
 var chosenWord = words[randomNum];
-var rightAnswer = [];
-var wrongAnswer = [];
-var underScore = [];
 var guessesLeft = 10;
-var docUnderScore = document.getElementsByClassName("underScores");
-var docWrongAnswer = document.getElementsByClassName("wrong");
 
 //Create "_" based on lenght of words
 var generateUnderscore = () => {
+    var str = "";
     for(var i= 0; i < chosenWord.length; i++)
     { 
+        str += "_";
     }
-    return underScore;
+    return str;
 }
+
+
+window.onload = () => {
+    console.log(chosenWord);
+    document.getElementById("lettersGuessed").innerHTML = generateUnderscore();
+};
 
 
  //Get users guesses
@@ -24,8 +27,45 @@ var generateUnderscore = () => {
      var keycode = event.keyCode;
      var keyword = String.fromCharCode(keycode);
 //if users guess is right 
+    var idx = 0;
+    
+    var arr =  document.getElementById("lettersGuessed").innerHTML.split("");
+    var wrong = document.getElementById("wrong").innerHTML;
+    var flag = false;
+    chosenWord.split("").forEach((letter) => {        
+        if (letter === keyword) {
+            arr[idx] = letter;
+            flag = true;            
+        } 
+        idx++;
+    });
+    document.getElementById("lettersGuessed").innerHTML = arr.join("");
+    
+    if (!flag) {
+        wrong += keyword;
+        guessesLeft--;
+    }
+    
+    
+    document.getElementById("wrong").innerHTML = wrong;
 
-     if (chosenWord.indexOf(keyword) > -1) {
+    document.getElementById("left").innerHTML = guessesLeft;
+    
+    setTimeout(() => {
+        if (arr.join("") === chosenWord) {
+            alert ("Wubba Lubba Dub Dub");
+            location.reload();
+        }
+    }, 100);
+
+    setTimeout(() => {
+        if (guessesLeft === 0) {
+            alert ("Wrong, Morty");
+            location.reload();
+        }
+    }, 100);
+    
+     /*if (chosenWord.indexOf(keyword) > -1) {
      // add to right words array
      rightAnswer.push(keyword);
      underScore[chosenWord.indexOf(keyword)]= keyword;
@@ -43,9 +83,8 @@ var generateUnderscore = () => {
 
      }
      
-     generateUnderscore[0].innerHTML = generateUnderscore().join(" ");
+     generateUnderscore[0].innerHTML = generateUnderscore().join(" ");*/
  });
 
 
  
-
